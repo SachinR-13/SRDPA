@@ -37,17 +37,17 @@ const sendMoneyValidator = [
             "Amount must be between ₹1 and ₹100000"
         ),
 
-    body("pin")
+    body("transactionPin")
         .trim()
         .notEmpty()
         .withMessage("Transaction PIN is required")
         .isLength({
-            min: 4,
-            max: 4,
+            min: 6,
+            max: 6,
         })
-        .withMessage("PIN must be exactly 4 digits")
+        .withMessage("Transaction PIN must be exactly 6 digits")
         .isNumeric()
-        .withMessage("PIN must contain only numbers"),
+        .withMessage("Transaction PIN must contain only numbers"),
 
 ];
 // ================= WITHDRAW MONEY =================

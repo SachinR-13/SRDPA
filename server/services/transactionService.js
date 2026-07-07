@@ -2,7 +2,7 @@ const Transaction = require("../models/Transaction");
 // const User = require("../models/User");
 const getTransactionsService = async (
     userId,
-    query
+    query= {}
 ) => {
 
     const filter = {
@@ -248,28 +248,6 @@ return transactions.map((transaction) => ({
     balanceAfter: transaction.balanceAfter,
 
     createdAt: transaction.createdAt,
-}));
-
-    return transactions.map((transaction) => ({
-
-    transactionId: transaction._id,
-
-    type: transaction.type,
-
-    amount: transaction.amount,
-
-    description: transaction.description,
-
-    receiverName: transaction.receiverName,
-
-    receiverSRPayId: transaction.receiverSRPayId,
-
-    status: transaction.status,
-
-    balanceAfter: transaction.balanceAfter,
-
-    createdAt: transaction.createdAt,
-
 }));
 
 };

@@ -9,9 +9,9 @@ const {
 // ================= GET WALLET =================
 
 const getWalletService = async (userId) => {
-
+console.log("USER ID:", userId);
     const wallet = await Wallet.findOne({ userId });
-
+console.log("WALLET:", wallet);
     if (!wallet) {
         throw new Error("Wallet not found");
     }

@@ -2,19 +2,17 @@ const {
     getWalletService,
     addMoneyService,
     sendMoneyService,
-     getTransactionsService,
 } = require("../services/walletService");
+const {
+    getTransactionsService,
+} = require("../services/transactionService");
 // ================= GET WALLET =================
 
 const getWallet = async (req, res) => {
     try {
-const { transactionPin } = req.body;
 
-const wallet = await getWalletService(
-    req.user.id,
-    transactionPin
-);
-        
+        const wallet = await getWalletService(req.user.id);
+
         res.status(200).json({
             success: true,
             wallet,
@@ -29,7 +27,6 @@ const wallet = await getWalletService(
 
     }
 };
-
 // ================= ADD MONEY =================
 
 const addMoney = async (req, res) => {
@@ -86,28 +83,34 @@ const result = await sendMoneyService(
 
     }
 };
-// ================= GET TRANSACTION HISTORY =================
+// // ================= GET TRANSACTION HISTORY =================
 
 const getTransactions = async (req, res) => {
 
     try {
 
-        const transactions = await getTransactionsService(req.user.id);
+        const result = await getTransactionsService(
+            req.user.id,
+            req.query
+        );
 
         res.status(200).json({
             success: true,
-            count: transactions.length,
-            transactions,
+            count: result.transactions.length,
+            pagination: result.pagination,
+            transactions: result.transactions,
         });
 
     } catch (error) {
 
-        res.status(400).json({
-            success: false,
-            message: error.message,
-        });
+    console.log(error);
 
-    }
+    res.status(400).json({
+        success: false,
+        message: error.message,
+    });
+
+}
 
 };
 module.exports = {

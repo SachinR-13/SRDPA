@@ -14,7 +14,7 @@ const {
     getWallet,
     addMoney,
     sendMoney,
-     getTransactions,
+    getTransactions,
 } = require("../controllers/walletController");
 /**
  * @swagger
