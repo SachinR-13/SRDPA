@@ -35,7 +35,7 @@ const options = {
 
     {
 
-        url: process.env.API_URL || "http://localhost:5000",
+        url: process.env.API_URL || "https://srpay-backend.onrender.com",
 
         description:
             process.env.NODE_ENV === "production"
