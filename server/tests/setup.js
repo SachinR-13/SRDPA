@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const connectDB = require("../config/db");
-
+jest.setTimeout(30000);
 dotenv.config();
 
 beforeAll(async () => {

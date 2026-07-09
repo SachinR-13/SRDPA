@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../app");
-jest.setTimeout(30000);
+//jest.setTimeout(30000);
 // ================= HELPER =================
 
 async function getAuthToken() {
