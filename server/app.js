@@ -87,7 +87,7 @@ app.use(compression());
 app.use(performanceMonitor);
 // ================= SWAGGER =================
 
-if (process.env.NODE_ENV !== "production") {
+//if (process.env.NODE_ENV !== "production") {
 
     app.use(
         "/api-docs",
@@ -95,7 +95,7 @@ if (process.env.NODE_ENV !== "production") {
         swaggerUi.setup(swaggerSpec)
     );
 
-}
+//}
 /* ---------------- Routes ---------------- */
 /* ---------------- Routes ---------------- */
 
