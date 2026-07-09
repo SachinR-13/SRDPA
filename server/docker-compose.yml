@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  srpay-backend:
+    build: .
+    container_name: srpay-backend
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - .env
+
+    restart: unless-stopped
