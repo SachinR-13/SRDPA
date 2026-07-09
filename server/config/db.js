@@ -13,13 +13,15 @@ const connectDB = async () => {
         console.log("✅ MongoDB Connected Successfully");
 
     } catch (error) {
+    console.error("❌ MongoDB Connection Failed");
+    console.error(error.message);
 
-        console.error("❌ MongoDB Connection Failed");
-        console.error(error.message);
-
+    if (process.env.NODE_ENV !== "test") {
         process.exit(1);
-
     }
+
+    throw error;
+}
 };
 
 module.exports = connectDB;
