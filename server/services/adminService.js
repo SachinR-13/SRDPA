@@ -307,7 +307,6 @@ const getWalletStatisticsService = async () => {
 
 };
 // ================= BLOCK / UNBLOCK USER =================
-
 const updateUserBlockStatusService = async (
     userId,
     isBlocked
@@ -319,7 +318,7 @@ const updateUserBlockStatusService = async (
             isBlocked,
         },
         {
-            new: true,
+            returnDocument: "after",
         }
     ).select("-password -transactionPin");
 

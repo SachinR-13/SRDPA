@@ -18,21 +18,23 @@ const createOrder = async (req, res) => {
             amount
         );
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             order,
         });
 
     } catch (error) {
 
-    console.error(error);
+        if (process.env.NODE_ENV !== "test") {
+            console.error(error);
+        }
 
-    res.status(400).json({
-        success: false,
-        message: error.message,
-    });
+        return res.status(400).json({
+            success: false,
+            message: error.message,
+        });
 
-}
+    }
 
 };
 // ================= VERIFY PAYMENT =================

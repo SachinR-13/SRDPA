@@ -94,7 +94,7 @@ const markNotificationAsReadService = async (
                 isRead: true,
             },
             {
-                new: true,
+                returnDocument: "after",
             }
         );
 

@@ -31,15 +31,25 @@ async function registerUser(
             password: "Password@123",
         });
 
-    expect(register.statusCode).toBe(201);
+    if (register.statusCode !== 201) {
+    console.log("REGISTER STATUS:", register.statusCode);
+    console.log("REGISTER BODY:", JSON.stringify(register.body, null, 2));
+    console.log("EMAIL:", email);
+    console.log("PHONE:", phone);
+}
 
+expect(register.statusCode).toBe(201);
     const login = await request(app)
-        .post("/api/auth/login")
-        .send({
-            email,
-            password: "Password@123",
-        });
+    .post("/api/auth/login")
+    .send({
+        email,
+        password: "Password@123",
+    });
 
+if (login.statusCode !== 200) {
+    console.log("LOGIN RESPONSE:", login.body);
+    console.log("EMAIL:", email);
+}
     expect(login.statusCode).toBe(200);
 
     return login.body;
@@ -70,7 +80,12 @@ async function createAdmin() {
             password: "Password@123",
         });
 
-    expect(login.statusCode).toBe(200);
+    if (login.statusCode !== 200) {
+    console.log("LOGIN STATUS:", login.statusCode);
+    console.log("LOGIN BODY:", JSON.stringify(login.body, null, 2));
+}
+
+expect(login.statusCode).toBe(200);
 
     return login.body;
 }
@@ -200,6 +215,8 @@ describe("Admin API", () => {
                 `Bearer ${admin.token}`
             );
 
+    console.log("BLOCK RESPONSE:", res.statusCode);
+    console.log("BLOCK BODY:", res.body);
         expect(res.statusCode).toBe(200);
         expect(res.body.success).toBe(true);
         expect(res.body.message)
@@ -226,6 +243,8 @@ describe("Admin API", () => {
                 `Bearer ${admin.token}`
             );
 
+    // console.log("BLOCK RESPONSE:", res.statusCode);
+    // console.log("BLOCK BODY:", res.body);
         const res = await request(app)
             .patch(`/api/admin/users/${user.user.id}/unblock`)
             .set(

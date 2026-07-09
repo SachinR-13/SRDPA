@@ -51,16 +51,18 @@ const newUser = await User.create({
     srpayId,
     password: hashedPassword,
 });
-// Create Wallet
+
 const wallet = await Wallet.create({
     userId: newUser._id,
 });
 
-// Link wallet to user
-newUser.walletId = wallet._id;
-await newUser.save();
+await User.findByIdAndUpdate(
+    newUser._id,
+    {
+        walletId: wallet._id,
+    }
+);
 
-// Return response
 return {
     id: newUser._id,
     fullName: newUser.fullName,
