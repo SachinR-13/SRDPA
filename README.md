@@ -1,91 +1,67 @@
 # 💳 SRPay Backend API
 
-A secure digital payment backend inspired by UPI applications like PhonePe, Google Pay, and Paytm.  
-SRPay provides wallet management, money transfers, QR payments, notifications, admin analytics, and secure authentication.
+A secure digital payment backend inspired by modern UPI applications like **PhonePe**, **Google Pay**, and **Paytm**.
+
+SRPay enables secure wallet management, QR-based payments, transaction tracking, notifications, payment gateway integration, and an admin dashboard using a scalable REST API architecture.
 
 ---
 
-# 🚀 Features
+# 🚀 Key Features
 
-## 👤 Authentication
-- User Registration
-- User Login (JWT Authentication)
-- Get User Profile
-- Secure Password Hashing (bcrypt)
-- Transaction PIN
-- Change Transaction PIN
-- PIN Lock after Multiple Failed Attempts
-- PIN History (Prevent PIN Reuse)
+### 👤 Authentication
+- User Registration & Login
+- JWT Authentication
+- Password Hashing (bcrypt)
+- User Profile
+- Transaction PIN Management
+- PIN Lock after Failed Attempts
+- PIN History (Prevents PIN Reuse)
 
----
-
-## 💰 Wallet
-
-- Wallet Creation
-- Wallet Balance
+### 💰 Wallet
+- Automatic Wallet Creation
 - Add Money
+- Wallet Balance
 - Send Money
 - Wallet Statistics
 
----
-
-## 💸 Transactions
-
-- Send Money
-- Receive Money
+### 💸 Transactions
+- Money Transfer
 - Transaction History
-- Filter Transactions
-- Search Transactions
+- Search & Filter Transactions
 
----
-
-## 📱 QR Payments
-
+### 📱 QR Payments
 - Generate Personal QR Code
 - Scan QR Code
 - Send Money using QR
 
----
+### 🔔 Notifications
+- View Notifications
+- Mark as Read
+- Mark All as Read
+- Delete Notifications
 
-## 🔔 Notifications
-
-- Get Notifications
-- Mark Notification as Read
-- Mark All Notifications as Read
-- Delete Notification
-
----
-
-## 👨‍💼 Admin Module
-
-- Dashboard
-- View All Users
-- Search Users
-- Block User
-- Unblock User
+### 👨‍💼 Admin Dashboard
+- User Management
+- Block / Unblock Users
+- Dashboard Analytics
+- Transaction Reports
 - Wallet Analytics
-- Transaction Analytics
-- Revenue Reports
-- Executive Dashboard
 
----
-
-## 💳 Payment Gateway
-
+### 💳 Payment Gateway
 - Razorpay Order Creation
 - Payment Verification
 
 ---
 
-## 🔒 Security
+# 🔒 Security
 
 - JWT Authentication
 - bcrypt Password Hashing
-- Transaction PIN
+- Transaction PIN Security
 - PIN Lock Mechanism
 - Helmet
-- Mongo Sanitize
 - XSS Protection
+- MongoDB Sanitize
 - HPP Protection
 - Express Validator
 
@@ -93,43 +69,39 @@ SRPay provides wallet management, money transfers, QR payments, notifications, a
 
 # 🛠 Tech Stack
 
-| Technology | Usage |
-|------------|-------|
-| Node.js | Runtime |
-| Express.js | Backend Framework |
-| MongoDB Atlas | Database |
-| Mongoose | ODM |
-| JWT | Authentication |
-| bcrypt | Password Hashing |
-| Razorpay | Payment Gateway |
-| QRCode | QR Generation |
-| Swagger | API Documentation |
-| Jest | Testing |
-| Supertest | API Testing |
-| GitHub Actions | CI |
+| Category | Technologies |
+|----------|--------------|
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas, Mongoose |
+| Authentication | JWT, bcrypt |
+| Payment | Razorpay |
+| QR | QRCode |
+| API Docs | Swagger |
+| Testing | Jest, Supertest |
+| DevOps | Docker, Docker Compose, GitHub Actions |
+| Security | Helmet, XSS-Clean, Mongo Sanitize, HPP |
 
 ---
 
-# 📁 Project Structure
+# 📂 Project Structure
 
 ```
-SRPay/
+SRPay
 │
-├── server/
+├── server
+│   ├── config
+│   ├── controllers
+│   ├── middleware
+│   ├── models
+│   ├── routes
+│   ├── services
+│   ├── tests
+│   ├── utils
+│   ├── validators
+│   ├── app.js
+│   ├── server.js
+│   └── package.json
 │
-├── config/
-├── controllers/
-├── middleware/
-├── models/
-├── routes/
-├── services/
-├── utils/
-├── validators/
-├── tests/
-│
-├── app.js
-├── server.js
-├── package.json
 └── README.md
 ```
 
@@ -143,7 +115,7 @@ Clone the repository
 git clone https://github.com/SachinR-13/SRpay.git
 ```
 
-Go to server
+Move to backend
 
 ```bash
 cd SRpay/server
@@ -155,32 +127,40 @@ Install dependencies
 npm install
 ```
 
-Create `.env`
+Create a `.env` file using `.env.example`
 
-```env
-NODE_ENV=development
-PORT=5000
-
-MONGODB_URI=YOUR_MONGODB_URI
-
-JWT_SECRET=YOUR_SECRET
-JWT_EXPIRE=7d
-
-RAZORPAY_KEY_ID=YOUR_KEY
-RAZORPAY_KEY_SECRET=YOUR_SECRET
-
-CLIENT_URL=http://localhost:5173
-API_URL=http://localhost:5000
-
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-```
-
-Run server
+Start the server
 
 ```bash
 npm run dev
+```
+
+---
+
+# 🐳 Docker
+
+Build Docker Image
+
+```bash
+docker build -t srpay-backend .
+```
+
+Run using Docker Compose
+
+```bash
+docker compose up -d
+```
+
+Stop the container
+
+```bash
+docker compose down
+```
+
+View logs
+
+```bash
+docker logs srpay-backend
 ```
 
 ---
@@ -193,24 +173,35 @@ Run Tests
 npm test
 ```
 
-Run Coverage
+Generate Coverage Report
 
 ```bash
 npm run coverage
 ```
 
-Current Status
+### Current Test Status
 
 ```
-Test Suites: 7 passed
-Tests: 59 passed
+✅ Test Suites: 7 Passed
+✅ Tests: 59 Passed
 ```
 
 ---
 
-# 📚 API Documentation
+# 🔄 Continuous Integration
 
-Swagger
+GitHub Actions automatically:
+
+- Installs Dependencies
+- Runs Jest Tests
+- Verifies Build
+- Executes on Every Push to `main`
+
+---
+
+# 📖 API Documentation
+
+Swagger UI
 
 ```
 http://localhost:5000/api-docs
@@ -218,120 +209,28 @@ http://localhost:5000/api-docs
 
 ---
 
-# 📌 Main API Endpoints
+# 📊 Project Highlights
 
-## Authentication
-
-```
-POST /api/auth/register
-POST /api/auth/login
-GET  /api/auth/profile
-POST /api/auth/set-transaction-pin
-POST /api/auth/verify-transaction-pin
-PUT  /api/auth/change-transaction-pin
-```
-
----
-
-## Wallet
-
-```
-GET  /api/wallet
-POST /api/wallet/add-money
-POST /api/wallet/send-money
-```
-
----
-
-## Transactions
-
-```
-GET /api/transactions
-GET /api/transactions/:id
-```
-
----
-
-## Users
-
-```
-GET  /api/users/profile
-POST /api/users/scan-qr
-GET  /api/users/my-qr
-```
-
----
-
-## Notifications
-
-```
-GET    /api/notifications
-PATCH  /api/notifications/:id/read
-PATCH  /api/notifications/read-all
-DELETE /api/notifications/:id
-```
-
----
-
-## Payments
-
-```
-POST /api/payment/create-order
-POST /api/payment/verify-payment
-```
-
----
-
-## Admin
-
-```
-GET    /api/admin/dashboard
-GET    /api/admin/users
-PATCH  /api/admin/users/:id/block
-PATCH  /api/admin/users/:id/unblock
-
-GET /api/admin/analytics/*
-GET /api/admin/reports/*
-```
-
----
-
-# 🔄 Continuous Integration
-
-GitHub Actions is configured to automatically
-
-- Install Dependencies
-- Run Jest Tests
-- Verify Build
-
-on every push to the **main** branch.
-
----
-
-# 📊 Current Project Status
-
-- ✅ Authentication
-- ✅ Wallet
-- ✅ QR Payment
+- ✅ JWT Authentication
+- ✅ Wallet System
+- ✅ QR Payments
 - ✅ Razorpay Integration
-- ✅ Notifications
 - ✅ Admin Dashboard
-- ✅ Analytics
-- ✅ Reports
+- ✅ Notifications
+- ✅ Secure Transaction PIN
 - ✅ Swagger Documentation
-- ✅ Jest Testing
-- ✅ GitHub Actions CI
+- ✅ 59 Automated Tests
+- ✅ Dockerized Backend
+- ✅ GitHub Actions CI/CD
 - ✅ MongoDB Atlas
 
 ---
 
-# 📈 Future Improvements
+# 🚀 Future Enhancements
 
-- Docker Support
-- Docker Compose
 - Email Verification
-- OTP Login
-- Two-Factor Authentication
+- OTP Authentication
+- Two-Factor Authentication (2FA)
 - UPI Integration
 - Mobile Application
 - Kubernetes Deployment
@@ -342,12 +241,8 @@ on every push to the **main** branch.
 
 **Sachin Kethavath**
 
-GitHub
-
-https://github.com/SachinR-13
+GitHub: https://github.com/SachinR-13
 
 ---
 
-# ⭐ Support
-
-If you found this project useful, consider giving it a ⭐ on GitHub.
+## ⭐ If you found this project useful, please consider giving it a star!is project useful, consider giving it a ⭐ on GitHub.
