@@ -8,7 +8,8 @@ const {
     getNotifications,
     markNotificationAsRead,
     markAllNotificationsAsRead,
-     deleteNotification,
+    deleteNotification,
+    getUnreadCount,
 } = require("../controllers/notificationController");
 /**
  * @swagger
@@ -107,4 +108,25 @@ router.delete(
     authMiddleware,
     deleteNotification
 );
+/**
+ * @swagger
+ * /api/notifications/unread-count:
+ *   get:
+ *     tags:
+ *       - Notifications
+ *     summary: Get unread notification count
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Unread count returned.
+ */
+// ================= GET UNREAD COUNT =================
+
+router.get(
+    "/unread-count",
+    authMiddleware,
+    getUnreadCount
+);
+
 module.exports = router;

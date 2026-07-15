@@ -130,9 +130,31 @@ const deleteNotification = async (
     }
 
 };
+// ================= GET UNREAD COUNT =================
+
+const getUnreadCount = async (req, res) => {
+    try {
+        const Notification = require("../models/Notification");
+        const count = await Notification.countDocuments({
+            userId: req.user.id,
+            isRead: false,
+        });
+        res.status(200).json({
+            success: true,
+            unreadCount: count,
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     getNotifications,
     markNotificationAsRead,
-     markAllNotificationsAsRead,
-      deleteNotification,
+    markAllNotificationsAsRead,
+    deleteNotification,
+    getUnreadCount,
 };

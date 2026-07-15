@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  srpay-backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: srpay-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    environment:
+      - NODE_ENV=production
+      - CLIENT_URL=http://localhost:5173
+    restart: unless-stopped
+    networks:
+      - srpay-network
+
+  srpay-frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: srpay-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - srpay-backend
+    restart: unless-stopped
+    networks:
+      - srpay-network
+
+networks:
+  srpay-network:
+    driver: bridge

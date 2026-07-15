@@ -2,17 +2,19 @@ const express = require("express");
 const router = express.Router();
 const validate = require("../middleware/validate");
 const {
-
     registerValidator,
-
     loginValidator,
-
-
 } = require("../validators/authValidator");
 const {
     registerUser,
     loginUser,
     getProfile,
+    updateProfile,
+    submitKyc,
+    toggleTwoFactor,
+    updateLimits,
+    changePassword,
+    getDashboardStats,
     setTransactionPin,
     verifyTransactionPin,
     changeTransactionPin,
@@ -21,194 +23,81 @@ const {
 const authMiddleware = require("../middleware/authMiddleware");
 
 // ================= PUBLIC ROUTES =================
-/**
- * @swagger
- * /api/auth/register:
- *   post:
- *     tags:
- *       - Authentication
- *     summary: Register a new user
- *     description: Creates a new SRPay user account and wallet.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - fullName
- *               - email
- *               - phone
- *               - password
- *             properties:
- *               fullName:
- *                 type: string
- *                 example: Rahul Kumar
- *               email:
- *                 type: string
- *                 example: rahul@gmail.com
- *               phone:
- *                 type: string
- *                 example: "9876543210"
- *               password:
- *                 type: string
- *                 example: Rahul@123
- *     responses:
- *       201:
- *         description: User registered successfully.
- *       400:
- *         description: Validation failed.
- */
 // Register User
-router.post(
-    "/register",
-    registerValidator,
-    validate,
-    registerUser
-);
-/**
- * @swagger
- * /api/auth/login:
- *   post:
- *     tags:
- *       - Authentication
- *     summary: Login user
- *     description: Authenticates the user and returns a JWT token.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: rahul@gmail.com
- *               password:
- *                 type: string
- *                 example: Rahul@123
- *     responses:
- *       200:
- *         description: Login successful.
- *       401:
- *         description: Invalid credentials.
- */
+router.post("/register", registerValidator, validate, registerUser);
+
 // Login User
-router.post(
-    "/login",
-    loginValidator,
-    validate,
-    loginUser
-);
+router.post("/login", loginValidator, validate, loginUser);
+
+// Send Login OTP
+router.post("/send-login-otp", async (req, res) => {
+    try {
+        const { sendLoginOtpService } = require("../services/authService");
+        const { createAndSendOtp } = require("../services/otpService");
+        const { phone } = req.body;
+        if (!phone) {
+            return res.status(400).json({ success: false, message: "Phone number is required" });
+        }
+        await sendLoginOtpService(phone);
+        const result = await createAndSendOtp(phone, "login");
+        res.status(200).json({
+            success: true,
+            message: result.message,
+            expiresIn: result.expiresIn,
+            ...(result.otp ? { otp: result.otp } : {}),
+        });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+});
+
+// Verify Login OTP
+router.post("/verify-login-otp", async (req, res) => {
+    try {
+        const { verifyOtp } = require("../services/otpService");
+        const { verifyLoginOtpService } = require("../services/authService");
+        const { phone, otp } = req.body;
+
+        if (!phone || !otp) {
+            return res.status(400).json({ success: false, message: "Phone and OTP are required" });
+        }
+
+        await verifyOtp(phone, otp, "login");
+        const data = await verifyLoginOtpService(phone);
+
+        res.status(200).json({
+            success: true,
+            message: "Login Successful",
+            token: data.token,
+            user: data.user,
+        });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+});
 
 // ================= PROTECTED ROUTES =================
-/**
- * @swagger
- * /api/auth/profile:
- *   get:
- *     tags:
- *       - Authentication
- *     summary: Get logged in user profile
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User profile fetched successfully.
- *       401:
- *         description: Unauthorized.
- */
-// Get Logged-in User Profile
+
+// Profile
 router.get("/profile", authMiddleware, getProfile);
-/**
- * @swagger
- * /api/auth/set-transaction-pin:
- *   post:
- *     tags:
- *       - Authentication
- *     summary: Set transaction PIN
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               pin:
- *                 type: string
- *                 example: "1234"
- *     responses:
- *       200:
- *         description: Transaction PIN set successfully.
- */
-// Set Transaction PIN
-router.post(
-    "/set-transaction-pin",
-    authMiddleware,
-    setTransactionPin
-);
-/**
- * @swagger
- * /api/auth/verify-transaction-pin:
- *   post:
- *     tags:
- *       - Authentication
- *     summary: Verify transaction PIN
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               pin:
- *                 type: string
- *                 example: "1234"
- *     responses:
- *       200:
- *         description: PIN verified successfully.
- */
-router.post(
-    "/verify-transaction-pin",
-    authMiddleware,
-    verifyTransactionPin
-);
-/**
- * @swagger
- * /api/auth/change-transaction-pin:
- *   post:
- *     tags:
- *       - Authentication
- *     summary: Change transaction PIN
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               oldPin:
- *                 type: string
- *                 example: "1234"
- *               newPin:
- *                 type: string
- *                 example: "5678"
- *     responses:
- *       200:
- *         description: Transaction PIN changed successfully.
- */
-// Change Transaction PIN
-router.post(
-    "/change-transaction-pin",
-    authMiddleware,
-    changeTransactionPin
-);
+router.put("/profile", authMiddleware, updateProfile);
+
+// KYC
+router.post("/kyc", authMiddleware, submitKyc);
+
+// Security
+router.post("/toggle-2fa", authMiddleware, toggleTwoFactor);
+router.post("/change-password", authMiddleware, changePassword);
+
+// Limits
+router.put("/limits", authMiddleware, updateLimits);
+
+// Dashboard
+router.get("/dashboard", authMiddleware, getDashboardStats);
+
+// Transaction PIN
+router.post("/set-transaction-pin", authMiddleware, setTransactionPin);
+router.post("/verify-transaction-pin", authMiddleware, verifyTransactionPin);
+router.post("/change-transaction-pin", authMiddleware, changeTransactionPin);
+
 module.exports = router;

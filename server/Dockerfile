@@ -2,12 +2,13 @@ FROM node:22-alpine
 
 WORKDIR /app
 
+# Copy package files first for better caching
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci --only=production
 
 COPY . .
 
 EXPOSE 5000
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

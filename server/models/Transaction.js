@@ -46,19 +46,31 @@ razorpayPaymentId: {
     default: null,
 },
 
-paymentMethod: {
-    type: String,
-
-    enum: [
-        "WALLET",
-        "RAZORPAY",
-        "QR",
-    ],
-
-    required: true,
-
-    default: "WALLET",
-},
+        paymentMethod: {
+            type: String,
+            enum: ["WALLET", "RAZORPAY", "QR", "PAYMENT_LINK", "RECURRING", "REQUEST"],
+            required: true,
+            default: "WALLET",
+        },
+        category: {
+            type: String,
+            enum: ["FOOD", "TRAVEL", "SHOPPING", "BILLS", "ENTERTAINMENT", "GROCERIES", "TRANSPORT", "HEALTH", "EDUCATION", "RENT", "SALARY", "INVESTMENT", "TRANSFER", "OTHER"],
+            default: "OTHER",
+        },
+        note: {
+            type: String,
+            default: "",
+            trim: true,
+            maxlength: 100,
+        },
+        tags: [{
+            type: String,
+            trim: true,
+        }],
+        isFlagged: {
+            type: Boolean,
+            default: false,
+        },
         type: {
             type: String,
             enum: ["CREDIT", "DEBIT"],

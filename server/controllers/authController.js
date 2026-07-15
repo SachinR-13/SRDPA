@@ -1,163 +1,162 @@
+const asyncHandler = require("../middleware/asyncHandler");
+const AppError = require("../utils/AppError");
 const {
     registerUserService,
     loginUserService,
     getProfileService,
+    updateProfileService,
+    submitKycService,
+    toggleTwoFactorService,
+    updateLimitsService,
+    changePasswordService,
+    getDashboardStatsService,
     setTransactionPinService,
     verifyTransactionPinService,
     changeTransactionPinService,
 } = require("../services/authService");
 
 // ================= REGISTER USER =================
+const registerUser = asyncHandler(async (req, res) => {
+    const user = await registerUserService(req.body);
 
-const registerUser = async (req, res) => {
-    try {
-
-        const user = await registerUserService(req.body);
-
-        res.status(201).json({
-            success: true,
-            message: "User Registered Successfully",
-            user,
-        });
-
-    } catch (error) {
-
-        res.status(400).json({
-            success: false,
-            message: error.message,
-        });
-
-    }
-};
+    res.status(201).json({
+        success: true,
+        message: "User Registered Successfully",
+        user,
+    });
+});
 
 // ================= LOGIN USER =================
+const loginUser = asyncHandler(async (req, res) => {
+    const data = await loginUserService(req.body);
 
-const loginUser = async (req, res) => {
-    try {
-
-        const data = await loginUserService(req.body);
-
-        res.status(200).json({
-            success: true,
-            message: "Login Successful",
-            token: data.token,
-            user: data.user,
-        });
-
-    } catch (error) {
-
-        res.status(401).json({
-            success: false,
-            message: error.message,
-        });
-
-    }
-};
+    res.status(200).json({
+        success: true,
+        message: "Login Successful",
+        token: data.token,
+        user: data.user,
+    });
+});
 
 // ================= GET PROFILE =================
+const getProfile = asyncHandler(async (req, res) => {
+    const user = await getProfileService(req.user.id);
 
-const getProfile = async (req, res) => {
-    try {
+    res.status(200).json({
+        success: true,
+        user,
+    });
+});
 
-        const user = await getProfileService(req.user.id);
+// ================= UPDATE PROFILE =================
+const updateProfile = asyncHandler(async (req, res) => {
+    const result = await updateProfileService(req.user.id, req.body);
 
-        res.status(200).json({
-            success: true,
-            user,
-        });
+    res.status(200).json({
+        success: true,
+        message: result.message,
+    });
+});
 
-    } catch (error) {
+// ================= SUBMIT KYC =================
+const submitKyc = asyncHandler(async (req, res) => {
+    const result = await submitKycService(req.user.id, req.body);
 
-        res.status(404).json({
-            success: false,
-            message: error.message,
-        });
+    res.status(200).json({
+        success: true,
+        message: result.message,
+        data: { isKycCompleted: result.isKycCompleted },
+    });
+});
 
-    }
-};
+// ================= TOGGLE 2FA =================
+const toggleTwoFactor = asyncHandler(async (req, res) => {
+    const result = await toggleTwoFactorService(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        message: result.isTwoFactorEnabled ? "Two-factor authentication enabled" : "Two-factor authentication disabled",
+        data: result,
+    });
+});
+
+// ================= UPDATE LIMITS =================
+const updateLimits = asyncHandler(async (req, res) => {
+    const result = await updateLimitsService(req.user.id, req.body);
+
+    res.status(200).json({
+        success: true,
+        message: "Transaction limits updated",
+        data: result,
+    });
+});
+
+// ================= CHANGE PASSWORD =================
+const changePassword = asyncHandler(async (req, res) => {
+    const result = await changePasswordService(req.user.id, req.body);
+
+    res.status(200).json({
+        success: true,
+        message: result.message,
+    });
+});
+
+// ================= GET DASHBOARD STATS =================
+const getDashboardStats = asyncHandler(async (req, res) => {
+    const stats = await getDashboardStatsService(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        data: stats,
+    });
+});
 
 // ================= SET TRANSACTION PIN =================
+const setTransactionPin = asyncHandler(async (req, res) => {
+    await setTransactionPinService(req.user.id, req.body);
 
-const setTransactionPin = async (req, res) => {
-    try {
+    res.status(200).json({
+        success: true,
+        message: "Transaction PIN set successfully",
+    });
+});
 
-        await setTransactionPinService(
-            req.user.id,
-            req.body
-        );
-
-        res.status(200).json({
-            success: true,
-            message: "Transaction PIN set successfully",
-        });
-
-    } catch (error) {
-
-        res.status(400).json({
-            success: false,
-            message: error.message,
-        });
-
-    }
-};
 // ================= VERIFY TRANSACTION PIN =================
+const verifyTransactionPin = asyncHandler(async (req, res) => {
+    const { transactionPin } = req.body;
 
-const verifyTransactionPin = async (req, res) => {
-
-    try {
-
-        const { transactionPin } = req.body;
-
-        await verifyTransactionPinService(
-            req.user.id,
-            transactionPin
-        );
-
-        res.status(200).json({
-            success: true,
-            message: "Transaction PIN verified successfully",
-        });
-
-    } catch (error) {
-
-        res.status(400).json({
-            success: false,
-            message: error.message,
-        });
-
+    if (!transactionPin) {
+        throw new AppError("Transaction PIN is required", 400);
     }
 
-};
+    await verifyTransactionPinService(req.user.id, transactionPin);
+
+    res.status(200).json({
+        success: true,
+        message: "Transaction PIN verified successfully",
+    });
+});
+
 // ================= CHANGE TRANSACTION PIN =================
+const changeTransactionPin = asyncHandler(async (req, res) => {
+    await changeTransactionPinService(req.user.id, req.body);
 
-const changeTransactionPin = async (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Transaction PIN changed successfully",
+    });
+});
 
-    try {
-
-        await changeTransactionPinService(
-            req.user.id,
-            req.body
-        );
-
-        res.status(200).json({
-            success: true,
-            message: "Transaction PIN changed successfully",
-        });
-
-    } catch (error) {
-
-        res.status(400).json({
-            success: false,
-            message: error.message,
-        });
-
-    }
-
-};
 module.exports = {
     registerUser,
     loginUser,
     getProfile,
+    updateProfile,
+    submitKyc,
+    toggleTwoFactor,
+    updateLimits,
+    changePassword,
+    getDashboardStats,
     setTransactionPin,
     verifyTransactionPin,
     changeTransactionPin,

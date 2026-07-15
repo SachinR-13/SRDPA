@@ -4,6 +4,7 @@
 # Environment Files
 **/.env
 **/.env.local
+**/.env.production
 
 # Logs
 **/logs/
@@ -15,6 +16,7 @@ client/build/
 
 # Coverage
 coverage/
+**/coverage/
 
 # IDE
 .vscode/
@@ -22,7 +24,8 @@ coverage/
 
 # OS
 .DS_Store
-Thumbs.db   
-# Test Coverage
-coverage/
-**/coverage/
+Thumbs.db
+
+# Uploads (local)
+server/uploads/*
+!server/uploads/.gitkeep
