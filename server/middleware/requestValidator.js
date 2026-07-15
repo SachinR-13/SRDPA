@@ -11,11 +11,8 @@ const BLOCKED_CONTENT_TYPES = [
     "application/xml",
 ];
 
-// Blocked headers that attackers may inject
-const BLOCKED_HEADERS = [
-    "x-forwarded-for",
-    "x-forwarded-host",
-    "x-forwarded-proto",
+// Suspicious headers that indicate proxy attacks (not standard reverse proxy headers)
+const SUSPICIOUS_HEADERS = [
     "client-ip",
     "x-client-ip",
 ];
@@ -65,8 +62,8 @@ const isSuspiciousRequest = (req) => {
         }
     }
 
-    // Check for header injection
-    for (const header of BLOCKED_HEADERS) {
+    // Check for suspicious headers
+    for (const header of SUSPICIOUS_HEADERS) {
         if (req.headers[header]) {
             return true;
         }
