@@ -48,8 +48,8 @@ const createAndSendOtp = async (phone, purpose) => {
     return {
       message: "OTP sent to your registered mobile number",
       expiresIn: Math.floor((existing.expiresAt - new Date()) / 1000),
-      // Show OTP in dev mode when SMS not configured
-      ...(process.env.NODE_ENV === "development" && !process.env.SMS_API_KEY ? { otp: existing.otp } : {}),
+      // Show OTP when no SMS provider configured (dev + production without SMS_API_KEY)
+      ...(!process.env.SMS_API_KEY ? { otp: existing.otp } : {}),
     };
   }
 
@@ -62,8 +62,8 @@ const createAndSendOtp = async (phone, purpose) => {
   return {
     message: "OTP sent to your registered mobile number",
     expiresIn: 300,
-    // Show OTP in dev mode when SMS not configured
-    ...(process.env.NODE_ENV === "development" && !process.env.SMS_API_KEY ? { otp } : {}),
+    // Show OTP when no SMS provider configured (dev + production without SMS_API_KEY)
+    ...(!process.env.SMS_API_KEY ? { otp } : {}),
   };
 };
 
