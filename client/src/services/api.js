@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 
 const API_BASE_URL = import.meta.env.DEV
   ? '/api'
-  : (import.meta.env.VITE_API_URL || 'https://srpay-backend.onrender.com/api');
+  : (import.meta.env.VITE_API_URL || 'https://srdpa.onrender.com/api');
 
 const API = axios.create({
   baseURL: API_BASE_URL,

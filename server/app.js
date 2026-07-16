@@ -67,6 +67,8 @@ const allowedOrigins = [
     process.env.CLIENT_URL,
     "https://srpay.vercel.app",
     "https://srpay-client.vercel.app",
+    "https://srdpa.vercel.app",
+    "https://srdpa-client.vercel.app",
     "http://localhost:5173",
 ].filter(Boolean);
 
