@@ -40,28 +40,8 @@ const AppError = require("./utils/AppError");
 const app = express();
 
 // =====================================================================
-//  SECURITY LAYER 1: HARDENING & HEADERS (Applied First - No Exceptions)
-// =====================================================================
-app.disable("x-powered-by");
-app.disable("etag");
-app.set("trust proxy", 1);
-app.use(helmet());
-app.use(securityHeaders);
-
-// =====================================================================
-//  SECURITY LAYER 2: RATE LIMITING (Applied Early - Blocks Flood Attacks)
-// =====================================================================
-app.use("/api/", apiLimiter); // Global API rate limit
-app.use("/api/auth/", authLimiter); // Strict auth rate limit
-app.use("/api/otp/", authLimiter); // Strict OTP rate limit
-
-// =====================================================================
-//  SECURITY LAYER 3: REQUEST VALIDATION (Sanitize & Block Malformed Requests)
-// =====================================================================
-app.use(requestValidator);
-
-// =====================================================================
-//  SECURITY LAYER 4: CORS (Strict Origin Control)
+//  SECURITY LAYER 1: CORS (MUST be first — preflight OPTIONS requests
+//  need CORS headers BEFORE any other middleware can block them)
 // =====================================================================
 app.use(cors({
     origin: function (origin, callback) {
@@ -92,6 +72,27 @@ app.use(cors({
     credentials: true,
     maxAge: 86400, // Cache preflight for 24 hours
 }));
+
+// =====================================================================
+//  SECURITY LAYER 2: HARDENING & HEADERS (Applied First - No Exceptions)
+// =====================================================================
+app.disable("x-powered-by");
+app.disable("etag");
+app.set("trust proxy", 1);
+app.use(helmet());
+app.use(securityHeaders);
+
+// =====================================================================
+//  SECURITY LAYER 3: RATE LIMITING (Applied Early - Blocks Flood Attacks)
+// =====================================================================
+app.use("/api/", apiLimiter); // Global API rate limit
+app.use("/api/auth/", authLimiter); // Strict auth rate limit
+app.use("/api/otp/", authLimiter); // Strict OTP rate limit
+
+// =====================================================================
+//  SECURITY LAYER 4: REQUEST VALIDATION (Sanitize & Block Malformed Requests)
+// =====================================================================
+app.use(requestValidator);
 
 // =====================================================================
 //  SECURITY LAYER 5: GENERAL HTTP MIDDLEWARE
