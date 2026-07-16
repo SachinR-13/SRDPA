@@ -63,23 +63,29 @@ app.use(requestValidator);
 // =====================================================================
 //  SECURITY LAYER 4: CORS (Strict Origin Control)
 // =====================================================================
-const allowedOrigins = [
-    process.env.CLIENT_URL,
-    "https://srpay.vercel.app",
-    "https://srpay-client.vercel.app",
-    "https://srdpa.vercel.app",
-    "https://srdpa-client.vercel.app",
-    "http://localhost:5173",
-].filter(Boolean);
-
 app.use(cors({
     origin: function (origin, callback) {
+        // Allow requests with no origin (server-to-server, mobile apps, curl)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error(`Origin ${origin} not allowed by CORS`));
+
+        // Exact match whitelist
+        const allowedOrigins = [
+            process.env.CLIENT_URL,
+            "https://srpay.vercel.app",
+            "https://srpay-client.vercel.app",
+            "https://srdpa.vercel.app",
+            "https://srdpa-client.vercel.app",
+            "http://localhost:5173",
+        ].filter(Boolean);
+
+        if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+
+        // Allow any *.vercel.app subdomain (for Vercel preview deployments)
+        if (origin.endsWith('.vercel.app') || origin === 'https://vercel.app') {
+            return callback(null, true);
         }
+
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
