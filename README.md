@@ -8,9 +8,9 @@ A full-stack digital payment application inspired by modern UPI applications lik
 
 | Service | URL |
 |---------|-----|
-| **Frontend** | [https://srpay.vercel.app](https://srpay.vercel.app) |
-| **Backend API** | [https://srpay-backend.onrender.com](https://srpay-backend.onrender.com) |
-| **API Docs (Swagger)** | [https://srpay-backend.onrender.com/api-docs](https://srpay-backend.onrender.com/api-docs) |
+| **Frontend** | [https://srdpa.vercel.app](https://srdpa.vercel.app) |
+| **Backend API** | [https://srdpa.onrender.com](https://srdpa.onrender.com) |
+| **API Docs (Swagger)** | [https://srdpa.onrender.com/api-docs](https://srdpa.onrender.com/api-docs) |
 
 ---
 
@@ -240,7 +240,7 @@ The Vite dev server proxies `/api` requests to `http://localhost:5000`.
 4. Add environment variables (same as Option A)
 5. Click **Create Web Service**
 
-Your backend will be available at: `https://srpay-backend.onrender.com`
+Your backend will be available at: `https://srdpa.onrender.com`
 
 ---
 
@@ -255,11 +255,11 @@ Your backend will be available at: `https://srpay-backend.onrender.com`
    - **Build Command**: `npm run build` (auto-detected from vercel.json)
    - **Output Directory**: `dist` (auto-detected from vercel.json)
 5. Add environment variables:
-   - `VITE_API_URL`: `https://srpay-backend.onrender.com/api`
+   - `VITE_API_URL`: `https://srdpa.onrender.com/api`
    - `VITE_RAZORPAY_KEY_ID`: Your Razorpay key ID
 6. Click **Deploy**
 
-Your frontend will be available at: `https://srpay.vercel.app`
+Your frontend will be available at: `https://srdpa.vercel.app`
 
 ---
 
@@ -268,11 +268,11 @@ Your frontend will be available at: `https://srpay.vercel.app`
 After deployment, update the following:
 
 1. **In Render** → Environment Variables:
-   - `CLIENT_URL`: `https://srpay.vercel.app`
-   - `API_URL`: `https://srpay-backend.onrender.com`
+   - `CLIENT_URL`: `https://srdpa.vercel.app`
+   - `API_URL`: `https://srdpa.onrender.com`
 
 2. **In Vercel** → Environment Variables:
-   - `VITE_API_URL`: `https://srpay-backend.onrender.com/api`
+   - `VITE_API_URL`: `https://srdpa.onrender.com/api`
 
 ---
 
@@ -309,7 +309,7 @@ npm run coverage  # Generate coverage report
 
 When the backend is running, visit:
 - **Local**: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
-- **Production**: [https://srpay-backend.onrender.com/api-docs](https://srpay-backend.onrender.com/api-docs)
+- **Production**: [https://srdpa.onrender.com/api-docs](https://srdpa.onrender.com/api-docs)
 
 ---
 
